@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @Medwards3000
+- 👋 Hi, I’m Michael Edwards
 - 👀 I’m interested in bash coding to improve cyber blue team admin tasks
 - 🌱 I’m currently learning bash shell scripting
 - 💞️ I’m looking to collaborate on bash 
