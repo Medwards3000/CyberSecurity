@@ -1,5 +1,5 @@
 - 👋 Hi, I’m Michael Edwards
-- 👀 I’m interested in bash coding to improve cyber blue team admin tasks
+- 👀 I’m interested in bash coding to improve cyber blue team activities
 - 🌱 I’m currently learning bash shell scripting
 - 💞️ I’m looking to collaborate on bash 
 - 📫 How to reach me medwards3000@hotmail.com
