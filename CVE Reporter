@@ -9,7 +9,7 @@
 #Sometimes it is useful if you only know the software version of a device and the known CVE's to extract further information for reporting.
 #For example if you know the software version in use on a Cisco switch, you can pull a list of CVE's using the "Cisco software checker"
 #tool (https://tools.cisco.com/security/center/softwarechecker.x to check Cisco Vulnerabilities) and then use the below script to generate a comprehensive report
-##prerequisite: JQ (Json Query must be installed). See link https://stedolan.github.io/jq/download/ for details. 
+#prerequisite: JQ (Json Query must be installed). See link https://stedolan.github.io/jq/download/ for details. 
 #The below is configured to use proxy. Update *proxy* with corporate proxy hostname.
 
 cat cve.csv | \ 
