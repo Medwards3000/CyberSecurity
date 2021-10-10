@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# QRadar Script to remove faulty wincollect agent data
+# Michael Edwards
+# October 2021
+#
+# Version History
+# 0.1    Initial version.
+#
+#
+#====================================================================================================
+# Global variables
+#====================================================================================================
+
+#====================================================================================================
+# Variables
+#====================================================================================================
+HOSTNAME=$(hostname -s)
+DATE=$(date +%Y%m%d-%H%M%S)
+OUTPUTDIR="/var/log/tmp/$HOSTNAME/$DATE"
+VERSION="0.1"
+
+#====================================================================================================
+# Environment checks
+#====================================================================================================
+clear
+printf "WinCollect Agent Cleanser Utility\n"
+printf "Version: $VERSION\n\n"
+printf "This utility will remove WinColllect remnants from the system. Use at own risk\n"
+printf "\n"
+printf "Instructions:\n"
+printf "First try and remove the wincolect agent using the webconsole\n"
+printf "Select option 1 to check if the hostname is listed in the database, if listed then amend hostname to _deleted by following the instructions\n"
+printf "Delete the agent folder in location /store/configservices/wincollect/configserver/HOSTNAME\n"
+printf "On the Windows machine delete the Wincollect folder in c:\program files\IBM\Wincollect\n"
+
+#====================================================================================================
+# Functions
+#====================================================================================================
+
+questionnaire () {
+printf "\n"
+printf "  1) Enter Agent Hostname to display ID \n"
+printf "  2) Enter ID to amend header with deleted\n"
+printf "  q) Quit\n\n"
+read -p "Select: " -r ANSWER
+
+if [[ $ANSWER == "q" ]]; then
+   exit 0
+
+elif [[ $ANSWER == "1" ]]; then
+     HOSTNAME_TO_ID
+
+elif [[ $ANSWER == "2" ]]; then
+     changehosttodeleted
+else
+     printf "Please Select a valid option"
+     sleep 2
+     questionnaire
+fi
+}
+
+HOSTNAME_TO_ID () {
+printf "\n"
+read -p "Enter Wincollect agent hostname (Case sensitive):" -r AGENTNAME
+list_wincollectid
+}
+
+list_wincollectid () {
+psql -U qradar -c "select id, hostname, deleted from ale_client where hostname like '%$AGENTNAME%';"
+read -p "Would you like to delete ID (y/n): " -r ANSWERID
+
+if [[ $ANSWERID == "y" ]]; then
+changehosttodeleted
+elif [[ $ANSWERID == "n" ]]; then
+    clear
+    questionnaire
+else
+    printf "Not a valid Option"
+    exit 0
+    wait 2
+    list_wincollectid
+fi
+}
+
+changehosttodeleted () {
+read -p "Type ID to amend hostname to deleted or q to quit: " -r IDTODELETE
+if [[ $IDTODELETE == "q" ]];then
+   exit 0
+
+elif [ -n "$IDTODELETE" ] && [ "$IDTODELETE" -eq "$IDTODELETE" ] 2>/dev/null; then
+  echo "number"
+  changehosttodeletedvalidated
+sleep 5
+
+else
+  echo "Please select a valid number"
+  sleep 2
+  changehosttodeleted
+fi
+}
+
+changehosttodeletedvalidated () {
+psql -U qradar -c "update ale_client set hostname = hostname || '_DELETED' where deleted = 't' and id=$IDTODELETE;"
+ sleep 5
+ exit 0
+}
+questionnaire
+changehosttodeleted
