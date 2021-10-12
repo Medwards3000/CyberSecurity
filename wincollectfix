@@ -38,6 +38,7 @@ printf "On the Windows machine delete the Wincollect folder in c:\program files\
 # Functions
 #====================================================================================================
 
+#Main Menu
 questionnaire () {
 printf "\n"
 printf "  1) Enter Agent Hostname to display ID \n"
@@ -65,7 +66,7 @@ printf "\n"
 read -p "Enter Wincollect agent hostname (Case sensitive):" -r AGENTNAME
 list_wincollectid
 }
-
+# Displays AQL ID from inputed Hostname
 list_wincollectid () {
 psql -U qradar -c "select id, hostname, deleted from ale_client where hostname like '%$AGENTNAME%';"
 read -p "Would you like to delete ID (y/n): " -r ANSWERID
@@ -78,7 +79,7 @@ elif [[ $ANSWERID == "n" ]]; then
 else
     printf "Not a valid Option"
     exit 0
-    wait 2
+    sleep 2
     list_wincollectid
 fi
 }
@@ -87,7 +88,7 @@ changehosttodeleted () {
 read -p "Type ID to amend hostname to deleted or q to quit: " -r IDTODELETE
 if [[ $IDTODELETE == "q" ]];then
    exit 0
-
+# Validate to ensure that input is numerical
 elif [ -n "$IDTODELETE" ] && [ "$IDTODELETE" -eq "$IDTODELETE" ] 2>/dev/null; then
   echo "number"
   changehosttodeletedvalidated
@@ -100,6 +101,7 @@ else
 fi
 }
 
+#Amend host record in AQL database to _deleted
 changehosttodeletedvalidated () {
 psql -U qradar -c "update ale_client set hostname = hostname || '_DELETED' where deleted = 't' and id=$IDTODELETE;"
  sleep 5
