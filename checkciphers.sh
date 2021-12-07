@@ -1,7 +1,7 @@
 #! /usr/bin/ksh
 # Credit to Gerard H Pile - https://serverfault.com/questions/1020494/scan-ip-range-for-ssl-tls-versions-and-vulnerabilities-with-legible-greppable-ou
 # This script performs a NMAP scan of hosts. It parses the result to a list of Ciphers, e.g TLS 1.0, 1.1, etc and calculates number in each line. 
-# nmap -sV --script ssl-enum-ciphers -p 443 -iL all_networks.list >TLS_Energia_list.txt
+# nmap -sV --script ssl-enum-ciphers -p 443 -iL all_networks.list >Network.txt
 # Can be used in conjuscion with "nmap -sV --script ssl-enum-ciphers -p 443 -iL network_subnets.list >cipherslist.txt". Just comment first line and second line.
 #Result:
 #192.168.1.1   TLSv1.0:3 TLSv1.1:3 TLSv1.2:5
